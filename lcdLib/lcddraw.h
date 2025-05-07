@@ -58,6 +58,8 @@ void drawChar5x7(u_char col, u_char row, char c,
  *  \param height Height of rectangle
  *  \param colorBGR Color of rectangle in BGR
  */
+void drawChar8x12(u_char col, u_char row, char c, u_int fgColorBGR, u_int bgColorBGR);
+void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR);
 void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
 		     u_int colorBGR);
 #endif // included

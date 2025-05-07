@@ -16,8 +16,13 @@ main()
 
   clearScreen(COLOR_BLUE);
 
-  drawString5x7(20,20, "hello", COLOR_GREEN, COLOR_RED);
+  short rowMiddle = screenHeight/2;
+  short colMiddle = screenWidth /2;
+  short row  = 0, col = 0;
 
-  fillRectangle(30,30, 60, 60, COLOR_ORANGE);
+ 
+  drawString5x7(20,20, "deez nuts", COLOR_WHITE, COLOR_RED);
+
+  drawString8x12(50, 50, "deez nuts", COLOR_WHITE, COLOR_RED);
   
 }
