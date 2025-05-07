@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include "switches.h"
 
+extern int currDirection;
 char switches = 0;
 
 // update interrupt sense for edge detection
@@ -24,4 +25,10 @@ void switch_init() {
 void switch_interrupt_handler() {
   char p2val = switch_update_interrupt_sense();
   switches = ~p2val & SWITCHES;  // store which switches are pressed
+
+  if (switches & SW1){
+    currDirection = (currDirection - 1) % 4;
+  } else if (switches & SW2){
+    currDirection = (currDirection + 1) % 4;
+  }
 }

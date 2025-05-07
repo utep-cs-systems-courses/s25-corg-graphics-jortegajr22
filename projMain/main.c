@@ -1,4 +1,4 @@
-
+#include <stdlib.h>
 #include <msp430.h>
 #include <libTimer.h>
 #include "lcdutils.h"
@@ -122,8 +122,8 @@ void wdt_c_handler() {
     spawncount = 0;
     
     //generate random square position
-    squareCol = (srand() % (screenWidth / MOVE_STEP)) * MOVE_STEP;
-    squareRow = (srand() % (screenHeight / MOVE_STEP)) * MOVE_STEP;
+    squareCol = (rand() % (screenWidth / MOVE_STEP)) * MOVE_STEP;
+    squareRow = (rand() % (screenHeight / MOVE_STEP)) * MOVE_STEP;
     redrawFlag = 1;
     }
 }

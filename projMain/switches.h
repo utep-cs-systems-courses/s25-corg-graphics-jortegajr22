@@ -9,7 +9,7 @@
 #define SWITCHES (SW1|SW2|SW3|SW4)
 
 
-
+extern int currDirection;
 extern char switches;
 
 
