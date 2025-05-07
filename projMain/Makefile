@@ -18,7 +18,7 @@ AS              = msp430-elf-gcc -mmcu=${CPU} -c
 all: snake.elf
 
 #additional rules for files
-snake.elf: ${COMMON_OBJECTS} main.o buzzer.o wdt_handler.o lcdutils.o llcddraw.o led.o switches.o assembly_helper.o
+snake.elf: ${COMMON_OBJECTS} main.o buzzer.o wdt_handler.o led.o switches.o 
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd
 
 load: snake.elf

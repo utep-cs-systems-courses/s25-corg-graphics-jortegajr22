@@ -7,9 +7,6 @@
 #define DIR_DOWN   2
 #define DIR_LEFT   3
 
-// Screen dimensions
-#define screenWidth 128
-#define screenHeight 160
 
 // Switch definitions
 #define SW1 1
@@ -23,17 +20,17 @@
 #define WDT_THRESHOLD 25
 
 // External variables (shared across multiple files)
-extern int isGameOver;
-extern int redrawFlag;
-extern int centerCol;
-extern int centerRow;
-extern int prevCol;
-extern int prevRow;
-extern int currDirection;
-extern unsigned char switches;
+int isGameOver;
+int redrawFlag;
+int centerCol;
+int centerRow;
+int prevCol;
+int prevRow;
+int currDirection;
+unsigned char switches;
 
-extern int squareCol;
-extern int squareRow;
+int squareCol;
+int squareRow;
 
 // Function prototypes
 void update_position();

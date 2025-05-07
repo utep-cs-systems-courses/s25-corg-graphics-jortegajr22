@@ -1,3 +1,4 @@
+
 #include <msp430.h>
 #include <libTimer.h>
 #include "lcdutils.h"
@@ -5,6 +6,7 @@
 #include "buzzer.h"
 #include "led.h"
 #include "main.h"
+
 
 #define SW1 1
 #define SW2 2
@@ -17,13 +19,16 @@
 #define MOVE_STEP 5
 #define WDT_THRESHOLD 25
 
-extern int isGameOver = 0;
-extern int redrawFlag;
-extern int centerCol;
-extern int centerRow;
-extern int prevCol;
-extern int prevRow;
-extern int currDirection = DIR_RIGHT;
+int isGameOver = 0;
+int redrawFlag;
+int centerCol;
+int centerRow;
+int prevCol;
+int prevRow;
+int currDirection = DIR_RIGHT;
+
+void switch_init();
+void switch_interrupt_handler();
 
 void update_position(){
   // save current pos as prev
@@ -45,14 +50,14 @@ void update_position(){
   if (centerRow >= screenHeight) centerRow = 0;
 
   // Check for collision with the food square
-  if (centerCol >=  squareCol - 2 && centerCol <= squarCol + 2 &&
+  if (centerCol >=  squareCol - 2 && centerCol <= squareCol + 2 &&
       centerRow >= squareRow - 2 && centerRow <= squareRow + 2) {
     isGameOver = 1;  // Increase delay multiplier
     squareCol = -1;     // Move square off-screen
     squareRow = -1;
   }
   P1OUT &= ~(LED_RED | LED_GREEN);
-  if (switches & SW1) PIOUT |= LED_GREEN;
+  if (switches & SW1) P1OUT |= LED_GREEN;
   if (switches & SW2) P1OUT |= LED_GREEN;
   if (switches & SW3) P1OUT |= LED_GREEN;
   if (switches & SW4) P1OUT |= LED_GREEN;
@@ -116,21 +121,33 @@ void wdt_c_handler() {
   if (spawncount >= 7 * 280) { //every 9 seconds
     spawncount = 0;
     
-      //insert food function
+    //generate random square position
+    squareCol = (srand() % (screenWidth / MOVE_STEP)) * MOVE_STEP;
+    squareRow = (srand() % (screenHeight / MOVE_STEP)) * MOVE_STEP;
     redrawFlag = 1;
     }
 }
   
 int main(){
 
-  cinfigureClocks();
+  configureClocks();
   lcd_init();
   clearScreen(COLOR_BLUE);
   switch_init();
   buzzer_init();
 
+  centerCol = screenWidth /2;
+  centerRow = screenHeight /2;
+  prevRow = centerRow;
+
+  squareCol = -1;
+  squareRow = -1;
+
+  srand(0);
+
   enableWDTInterrupts();
   or_sr(0x8);
+  
 
   while(1){
     if(redrawFlag) {
