@@ -32,10 +32,10 @@ void update_position(){
 
   // Update position based on current direction
   switch (currDirection) {
-  case DIR_UP;     centerRow -= MOVE_STEP; break;
-  case DIR_RIGHT;  centerCol += MOVE_STEP; break;
-  case DIR_DOWN;   centerRow += MOVE_STEP; break;
-  case DIR_LEFT;   centerCol -= MOVE_STEP; break;
+  case DIR_UP:     centerRow -= MOVE_STEP; break;
+  case DIR_RIGHT:  centerCol += MOVE_STEP; break;
+  case DIR_DOWN:   centerRow += MOVE_STEP; break;
+  case DIR_LEFT:   centerCol -= MOVE_STEP; break;
   }
 
   // Boundary checks to wrap around screen
@@ -46,18 +46,18 @@ void update_position(){
 
   // Check for collision with the food square
   if (centerCol >=  squareCol - 2 && centerCol <= squarCol + 2 &&
-      centerRow >= squareRow - 2 ** centerRow <= squareRow + 2) {//
+      centerRow >= squareRow - 2 && centerRow <= squareRow + 2) {
     isGameOver = 1;  // Increase delay multiplier
     squareCol = -1;     // Move square off-screen
     squareRow = -1;
   }
-  P1OUT &- ~(LED_RED | LED_GREEN);
+  P1OUT &= ~(LED_RED | LED_GREEN);
   if (switches & SW1) PIOUT |= LED_GREEN;
   if (switches & SW2) P1OUT |= LED_GREEN;
   if (switches & SW3) P1OUT |= LED_GREEN;
   if (switches & SW4) P1OUT |= LED_GREEN;
 
-  if(switches * SW1){
+  if(switches & SW1){
     buzzer_set_period(1000);
   }else if (switches & SW2){
     buzzer_set_period(2000);
@@ -80,7 +80,7 @@ void gameOver(){
     while(1);  //forever loop
   }
 void draw_shape(int color) {
-  unsigned int drawColor = (coloor ==1) ? COLOR_YELLOW : COLOR_BLUE;
+  unsigned int drawColor = (color == 1) ? COLOR_YELLOW : COLOR_BLUE;
   fillRectangle((color ? centerCol : prevCol), (color ? centerRow : prevRow), 8, 8, drawColor);
 }
 
@@ -105,7 +105,7 @@ void wdt_c_handler() {
   if (!isGameOver){
 
     if (secCount >= WDT_THRESHOLD){
-      seccount = 0;
+      secCount = 0;
       update_position();
     }
   }
@@ -114,7 +114,7 @@ void wdt_c_handler() {
   }
   
   if (spawncount >= 7 * 280) { //every 9 seconds
-    spwncount = 0;
+    spawncount = 0;
     
       //insert food function
     redrawFlag = 1;
@@ -133,8 +133,8 @@ int main(){
   or_sr(0x8);
 
   while(1){
-    if(redrawScrreen) {
-      redrawScreen = 0;
+    if(redrawFlag) {
+      redrawFlag = 0;
       update_shape();
     }
     P1OUT &= ~BIT6;
