@@ -6,7 +6,7 @@
 #include "buzzer.h"
 #include "led.h"
 #include "main.h"
-
+#include "erase_shape.s"
 
 #define SW1 1
 #define SW2 2
@@ -78,7 +78,7 @@ void update_position(){
 }
 void gameOver(){
     clearScreen(COLOR_BLUE);
-    drawString8x12(screenWidth / 2 - 36, screenHeight /2 -6,
+    drawString8x12(screenWidth / 2 - 36, screenHeight /2 -40,
 		   "GAME OVER", COLOR_RED, COLOR_BLUE);
     // force stop execution
     WDTCTL = WDTPW | WDTHOLD; // Stop the watchdog TImer
@@ -96,9 +96,6 @@ void update_shape() {
   }
 }
 
-void erase_shape(){
-  draw_shape(0);
-}
 
 void wdt_c_handler() {
   static int secCount = 0;
@@ -109,9 +106,13 @@ void wdt_c_handler() {
 
   if (!isGameOver){
 
-    if (secCount >= WDT_THRESHOLD){
-      secCount = 0;
+    if (secCount == WDT_THRESHOLD){
+      // secCount = 0;
       update_position();
+    }
+    if (secCount > 30){
+      secCount = 0;
+      erase_shape();
     }
   }
   if (isGameOver){
